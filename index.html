@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <title>lol casino 🎰</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #8B0000 0%, #2F1B14 50%, #1a0000 100%);
+            background-size: 400% 400%;
+            animation: rotateBackground 20s ease-in-out infinite;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        @keyframes rotateBackground {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(255,215,0,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(255,215,0,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            color: rgba(212, 175, 55, 0.4);
+            font-size: 12px;
+            font-weight: 300;
+        }
+
+        .coin-counter {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(145deg, #2a1810, #1a0f08);
+            border: 2px solid #D4AF37;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #D4AF37;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 215, 0, 0.2);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .coin-counter.winning {
+            color: #32CD32;
+            border-color: #32CD32;
+            text-shadow: 0 0 12px rgba(50, 205, 50, 0.6);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(50, 205, 50, 0.2),
+                0 0 20px rgba(50, 205, 50, 0.3);
+        }
+
+        .coin-counter.losing {
+            color: #FF4444;
+            border-color: #FF4444;
+            text-shadow: 0 0 12px rgba(255, 68, 68, 0.6);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 68, 68, 0.2),
+                0 0 20px rgba(255, 68, 68, 0.3);
+        }
+
+        .coin-change {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 16px;
+            font-weight: bold;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(0);
+            transition: all 0.5s ease;
+        }
+
+        .coin-change.show {
+            opacity: 1;
+            transform: translateY(-20px);
+        }
+
+        .slot-machine-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slot-machine {
+            background: linear-gradient(145deg, #8B4513, #654321);
+            border-radius: 25px 25px 15px 15px;
+            padding: 50px 40px 20px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            border: 4px solid #D4AF37;
+            position: relative;
+            max-width: 90vw;
+            margin-bottom: 20px;
+        }
+
+        .slot-machine::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 15px;
+            right: 15px;
+            height: 8px;
+            background: linear-gradient(90deg, #D4AF37, #FFD700, #D4AF37);
+            border-radius: 4px;
+        }
+
+        .slot-machine::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 15px;
+            right: 15px;
+            height: 8px;
+            background: linear-gradient(90deg, #8B4513, #654321, #8B4513);
+            border-radius: 4px;
+        }
+
+        .machine-top {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 50px;
+            background: linear-gradient(145deg, #D4AF37, #B8860B);
+            border-radius: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            color: #2F1B14;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .screen {
+            background: linear-gradient(145deg, #000000, #1a1a1a);
+            border-radius: 15px;
+            padding: 25px 20px;
+            margin-bottom: 25px;
+            border: 3px solid #333;
+            box-shadow: 
+                inset 0 4px 12px rgba(0, 0, 0, 0.8),
+                0 2px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .reels-container {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 15px;
+        }
+
+        .reel {
+            width: clamp(75px, 18vw, 110px);
+            height: clamp(75px, 18vw, 110px);
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(32px, 8vw, 55px);
+            box-shadow: 
+                inset 0 2px 6px rgba(255, 255, 255, 0.9),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.1),
+                0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .reel.spinning {
+            animation: reelBlur 0.15s linear infinite;
+            filter: blur(2px);
+            box-shadow: 
+                inset 0 2px 6px rgba(255, 255, 255, 0.9),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.1),
+                0 4px 12px rgba(0, 0, 0, 0.2),
+                0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        @keyframes reelBlur {
+            0% { transform: translateY(0); }
+            33% { transform: translateY(-3px); }
+            66% { transform: translateY(3px); }
+            100% { transform: translateY(0); }
+        }
+
+        .lever-container {
+            position: relative;
+            width: 120px;
+            height: 80px;
+            margin-top: 10px;
+        }
+
+        .lever-base {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 25px;
+            background: linear-gradient(145deg, #8B4513, #654321);
+            border-radius: 15px;
+            border: 2px solid #D4AF37;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .lever-arm {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 50px;
+            background: linear-gradient(to right, #666, #999, #666);
+            border-radius: 4px;
+            transform-origin: bottom center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .lever-handle {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(145deg, #D4AF37, #B8860B);
+            border-radius: 15px;
+            cursor: grab;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                inset 0 2px 5px rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
+            border: 2px solid #8B4513;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #2F1B14;
+            font-weight: bold;
+        }
+
+        .lever-handle:active {
+            cursor: grabbing;
+        }
+
+        .lever-container.pulled .lever-arm {
+            transform: translateX(-50%) rotate(30deg);
+        }
+
+        .lever-container.pulled .lever-handle {
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.3),
+                0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .cost-display {
+            text-align: center;
+            color: rgba(212, 175, 55, 0.8);
+            font-size: clamp(14px, 3vw, 18px);
+            font-weight: 500;
+            margin-top: 15px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .money-bag {
+            position: absolute;
+            font-size: 30px;
+            pointer-events: none;
+            z-index: 200;
+            opacity: 0;
+        }
+
+        .money-bag.animate {
+            animation: moneyBagFly 1.5s ease-out forwards;
+        }
+
+        @keyframes moneyBagFly {
+            0% {
+                opacity: 1;
+                transform: scale(0.5) rotate(0deg);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1.2) rotate(180deg);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1) rotate(270deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.3) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .handle-container {
+                right: -35px;
+            }
+            
+            .handle-knob {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .slot-machine {
+                padding: 30px 25px 25px;
+            }
+            
+            .coin-counter {
+                top: 20px;
+                right: 20px;
+                padding: 10px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .handle-container {
+                right: -30px;
+            }
+            
+            .handle-base {
+                height: 50px;
+                width: 12px;
+            }
+            
+            .handle-knob {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="coin-counter" id="coinCounter">
+        💰 <span id="coinCount">10</span>
+        <div class="coin-change" id="coinChange"></div>
+    </div>
+
+    <div class="slot-machine-container">
+        <div class="slot-machine">
+            <div class="machine-top">CASINO</div>
+            
+            <div class="screen">
+                <div class="reels-container">
+                    <div class="reel" id="reel1">🍒</div>
+                    <div class="reel" id="reel2">🍋</div>
+                    <div class="reel" id="reel3">🍊</div>
+                </div>
+            </div>
+            
+            <div class="cost-display">PULL DOWN TO ROLL (10 COINS PER ROLL)</div>
+        </div>
+
+        <div class="lever-container" id="leverContainer">
+            <div class="lever-base"></div>
+            <div class="lever-arm" id="leverArm">
+                <div class="lever-handle" id="leverHandle">PULL</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">jxsper ;)</div>
+
+    <script>
+        let coins = 10;
+        let isSpinning = false;
+        let coinAnimationRunning = false;
+
+        const symbols = [
+            { symbol: '🍒', weight: 20, value: 5 },
+            { symbol: '🍋', weight: 18, value: 8 },
+            { symbol: '🍊', weight: 18, value: 8 },
+            { symbol: '🍇', weight: 15, value: 12 },
+            { symbol: '⭐', weight: 12, value: 25 },
+            { symbol: '💎', weight: 8, value: 50 },
+            { symbol: '🔔', weight: 5, value: 100 },
+            { symbol: '💰', weight: 3, value: 200 },
+            { symbol: '🎰', weight: 0.8, value: 500 },
+            { symbol: '🍀', weight: 0.2, value: 1000 }
+        ];
+
+        function animateCoins(amount, isWin) {
+            if (coinAnimationRunning) return;
+            coinAnimationRunning = true;
+
+            const coinCounter = document.getElementById('coinCounter');
+            const coinCountElement = document.getElementById('coinCount');
+            const coinChangeElement = document.getElementById('coinChange');
+            
+            
+            coinChangeElement.textContent = isWin ? `+${amount}` : `-${amount}`;
+            coinChangeElement.style.color = isWin ? '#32CD32' : '#FF4444';
+            coinChangeElement.classList.add('show');
+            
+            
+            if (isWin) {
+                coinCounter.classList.add('winning');
+                coinCounter.classList.remove('losing');
+            } else {
+                coinCounter.classList.add('losing');
+                coinCounter.classList.remove('winning');
+            }
+
+            
+            const startCoins = parseInt(coinCountElement.textContent);
+            const endCoins = isWin ? startCoins + amount : startCoins - amount;
+            const duration = 800;
+            const startTime = Date.now();
+
+            function updateNumber() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+                
+                const currentCoins = Math.round(startCoins + (endCoins - startCoins) * easeProgress);
+                coinCountElement.textContent = currentCoins;
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                } else {
+                    coins = endCoins;
+                    setTimeout(() => {
+                        coinCounter.classList.remove('winning', 'losing');
+                        coinChangeElement.classList.remove('show');
+                        coinAnimationRunning = false;
+                    }, 500);
+                }
+            }
+
+            updateNumber();
+        }
+
+        function createMoneyBagAnimation(amount) {
+            const container = document.querySelector('.slot-machine-container');
+            const coinCounter = document.getElementById('coinCounter');
+            const numBags = Math.min(Math.floor(amount / 10) + 1, 8);
+
+            for (let i = 0; i < numBags; i++) {
+                setTimeout(() => {
+                    const moneyBag = document.createElement('div');
+                    moneyBag.className = 'money-bag';
+                    moneyBag.textContent = '💰';
+                    
+                    
+                    const startX = Math.random() * 300 + 100;
+                    const startY = Math.random() * 200 + 150;
+                    
+                    moneyBag.style.left = startX + 'px';
+                    moneyBag.style.top = startY + 'px';
+                    
+                    container.appendChild(moneyBag);
+                    
+                    
+                    setTimeout(() => {
+                        const counterRect = coinCounter.getBoundingClientRect();
+                        const containerRect = container.getBoundingClientRect();
+                        const targetX = counterRect.left - containerRect.left + 20;
+                        const targetY = counterRect.top - containerRect.top + 10;
+                        
+                        moneyBag.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                        moneyBag.style.left = targetX + 'px';
+                        moneyBag.style.top = targetY + 'px';
+                        moneyBag.style.transform = 'scale(0.3)';
+                        moneyBag.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            moneyBag.remove();
+                        }, 800);
+                    }, 100);
+                }, i * 150);
+            }
+        }
+
+        function getRandomSymbol() {
+            const totalWeight = symbols.reduce((sum, s) => sum + s.weight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let symbol of symbols) {
+                random -= symbol.weight;
+                if (random <= 0) {
+                    return symbol;
+                }
+            }
+            return symbols[0];
+        }
+
+        function spin() {
+            if (isSpinning || coinAnimationRunning) return;
+            
+            isSpinning = true;
+            
+            
+            animateCoins(10, false);
+
+            const reels = [
+                document.getElementById('reel1'),
+                document.getElementById('reel2'),
+                document.getElementById('reel3')
+            ];
+
+            
+            reels.forEach((reel, index) => {
+                reel.classList.add('spinning');
+                
+                const spinInterval = setInterval(() => {
+                    reel.textContent = getRandomSymbol().symbol;
+                }, 100);
+
+                
+                setTimeout(() => {
+                    clearInterval(spinInterval);
+                    reel.classList.remove('spinning');
+                    reel.textContent = getRandomSymbol().symbol;
+                    
+                    
+                    if (index === 2) {
+                        setTimeout(() => {
+                            checkWin(reels);
+                            isSpinning = false;
+                        }, 300);
+                    }
+                }, 1200 + index * 600);
+            });
+        }
+
+        function checkWin(reels) {
+            const results = reels.map(reel => reel.textContent);
+            const [r1, r2, r3] = results;
+
+            if (r1 === r2 && r2 === r3) {
+                
+                const symbolData = symbols.find(s => s.symbol === r1);
+                const winAmount = symbolData.value * 3; // Increased multiplier
+                
+                setTimeout(() => {
+                    createMoneyBagAnimation(winAmount);
+                    setTimeout(() => {
+                        animateCoins(winAmount, true);
+                    }, 800);
+                }, 500);
+                
+            } else if (r1 === r2 || r2 === r3 || r1 === r3) {
