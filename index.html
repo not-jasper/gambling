@@ -1,28 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <title>emoji slots</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Slot Machine</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="achievements-btn">Achievements</div>
-  <div class="slot-container">
-    <div class="slot" id="slot1"></div>
-    <div class="slot" id="slot2"></div>
-    <div class="slot" id="slot3"></div>
-  </div>
-  <div class="click-message" id="clickMessage">(tap anywhere to spin)</div>
-  <div id="footer">made with <span style="color: red;">‹𝟹</span> by jasper</div>
-  <div id="achievement-popup-container"></div>
-
-  <div id="achievements-panel" class="hidden">
-    <div class="achievements-list" id="achievements-list">
-      <!-- achievements will populate here -->
+  <div id="app">
+    <div class="slots">
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
+      <div class="slot">❓</div>
     </div>
+    <div id="message">Tap anywhere to spin</div>
+    <button id="achievements-button">🏆</button>
+    <div id="achievements-panel"></div>
   </div>
-
-  <script src="script.js"></script>
+  <div class="credit">made with ‹𝟹 by jasper</div>
+  <script src="script.js" defer></script>
 </body>
 </html>
